@@ -49,7 +49,4 @@ const ClientSchema = new Schema({
   timestamps: true
 });
 
-ClientSchema.index({ nickname: 1 });
-ClientSchema.index({ email: 1 });
-
 module.exports = mongoose.model('client', ClientSchema);

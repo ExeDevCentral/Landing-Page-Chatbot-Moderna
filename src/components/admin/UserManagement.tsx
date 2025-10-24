@@ -18,64 +18,13 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUser }) => {
   const [roleFilter, setRoleFilter] = useState<UserRole | 'all'>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
 
-  // Mock data - replace with actual API calls
   useEffect(() => {
     const loadUsers = async () => {
       setIsLoading(true);
       try {
-        // Simulate API call
-        const mockUsers: User[] = [
-          {
-            _id: '1',
-            email: 'admin@empresa.com',
-            password: 'hashed',
-            firstName: 'Carlos',
-            lastName: 'Administrador',
-            role: UserRole.ADMIN,
-            permissions: [Permission.CREATE_USER, Permission.READ_USER, Permission.UPDATE_USER],
-            isActive: true,
-            createdAt: new Date('2024-01-01'),
-            updatedAt: new Date('2024-01-01'),
-            profile: {
-              phone: '+1234567890',
-              department: 'Administración',
-              position: 'Gerente General'
-            }
-          },
-          {
-            _id: '2',
-            email: 'empleado1@empresa.com',
-            password: 'hashed',
-            firstName: 'María',
-            lastName: 'García',
-            role: UserRole.EMPLOYEE,
-            permissions: [Permission.READ_PRODUCT, Permission.CREATE_SALE],
-            isActive: true,
-            createdAt: new Date('2024-01-15'),
-            updatedAt: new Date('2024-01-15'),
-            profile: {
-              phone: '+1234567891',
-              department: 'Ventas',
-              position: 'Vendedora'
-            }
-          },
-          {
-            _id: '3',
-            email: 'cliente1@email.com',
-            password: 'hashed',
-            firstName: 'Juan',
-            lastName: 'Pérez',
-            role: UserRole.CLIENT,
-            permissions: [Permission.READ_PRODUCT, Permission.CREATE_SALE],
-            isActive: true,
-            createdAt: new Date('2024-02-01'),
-            updatedAt: new Date('2024-02-01'),
-            profile: {
-              phone: '+1234567892'
-            }
-          }
-        ];
-        setUsers(mockUsers);
+        const response = await fetch('/api/users');
+        const data = await response.json();
+        setUsers(data.data.users);
       } catch (error) {
         console.error('Error loading users:', error);
       } finally {
@@ -101,22 +50,15 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUser }) => {
 
   const handleCreateUser = useCallback(async (userData: Partial<User>) => {
     try {
-      // Simulate API call
-      const newUser: User = {
-        _id: Date.now().toString(),
-        email: userData.email || '',
-        password: 'hashed',
-        firstName: userData.firstName || '',
-        lastName: userData.lastName || '',
-        role: userData.role || UserRole.CLIENT,
-        permissions: userData.permissions || [],
-        isActive: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        profile: userData.profile
-      };
-      
-      setUsers(prev => [...prev, newUser]);
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      });
+      const data = await response.json();
+      setUsers(prev => [...prev, data.data.user]);
       setShowCreateModal(false);
     } catch (error) {
       console.error('Error creating user:', error);
@@ -125,11 +67,16 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUser }) => {
 
   const handleUpdateUser = useCallback(async (userId: string, userData: Partial<User>) => {
     try {
-      // Simulate API call
-      setUsers(prev => prev.map(user => 
-        user._id === userId 
-          ? { ...user, ...userData, updatedAt: new Date() }
-          : user
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      });
+      const data = await response.json();
+      setUsers(prev => prev.map(user =>
+        user._id === userId ? data.data.user : user
       ));
       setEditingUser(null);
     } catch (error) {
@@ -137,13 +84,18 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUser }) => {
     }
   }, []);
 
-  const handleToggleUserStatus = useCallback(async (userId: string) => {
+  const handleToggleUserStatus = useCallback(async (userId: string, isActive: boolean) => {
     try {
-      // Simulate API call
-      setUsers(prev => prev.map(user => 
-        user._id === userId 
-          ? { ...user, isActive: !user.isActive, updatedAt: new Date() }
-          : user
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ isActive: !isActive })
+      });
+      const data = await response.json();
+      setUsers(prev => prev.map(user =>
+        user._id === userId ? data.data.user : user
       ));
     } catch (error) {
       console.error('Error toggling user status:', error);
@@ -302,7 +254,7 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUser }) => {
                     {currentUser.permissions.includes(Permission.UPDATE_USER) && (
                       <button
                         className={`toggle-btn ${user.isActive ? 'deactivate' : 'activate'}`}
-                        onClick={() => handleToggleUserStatus(user._id)}
+                        onClick={() => handleToggleUserStatus(user._id, user.isActive)}
                         title={user.isActive ? 'Desactivar' : 'Activar'}
                       >
                         {user.isActive ? '⏸️' : '▶️'}

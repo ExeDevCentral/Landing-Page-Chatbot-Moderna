@@ -4,6 +4,7 @@ require('dotenv').config({ path: __dirname + '/../../.env' });
 const mongoose = require('mongoose');
 const Role = require('../models/Role');
 const Permission = require('../models/Permission');
+const Client = require('../models/Client'); // Importar el modelo de Cliente
 
 const permissions = [
   { name: 'create-ticket', description: 'Create a new ticket' },
@@ -38,6 +39,7 @@ const seed = async () => {
     // Clear existing data
     await Permission.deleteMany({});
     await Role.deleteMany({});
+    await Client.deleteMany({}); // Limpiar clientes existentes
 
     // Create permissions
     const createdPermissions = await Permission.insertMany(permissions);
@@ -56,6 +58,23 @@ const seed = async () => {
 
     await Role.insertMany(rolesToCreate);
     console.log('Roles created and permissions assigned.');
+
+    // Create fake clients
+    const clients = [];
+    for (let i = 1; i <= 10; i++) {
+      clients.push({
+        nickname: `client${i}`,
+        email: `client${i}@example.com`,
+        phone: `123-456-789${i}`,
+        address: `${i} Fake St, City, Country`,
+        bio: `This is a bio for client ${i}.`,
+        preferences: `Likes item ${i}.`,
+        contactHours: '9 AM - 5 PM'
+      });
+    }
+
+    await Client.insertMany(clients);
+    console.log('10 fake clients created.');
 
     console.log('Seeding complete!');
   } catch (error) {

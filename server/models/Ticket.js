@@ -62,7 +62,6 @@ const TicketSchema = new mongoose.Schema({
 });
 
 // Indexes for better performance
-TicketSchema.index({ orderNumber: 1 });
 TicketSchema.index({ client: 1 });
 TicketSchema.index({ table: 1 });
 TicketSchema.index({ waiter: 1 });

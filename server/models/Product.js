@@ -171,10 +171,7 @@ productSchema.index({ name: 'text', description: 'text', tags: 'text' });
 productSchema.index({ category: 1 });
 productSchema.index({ brand: 1 });
 productSchema.index({ status: 1 });
-productSchema.index({ sku: 1 });
-productSchema.index({ barcode: 1 });
 productSchema.index({ createdAt: -1 });
-productSchema.index({ 'variants.sku': 1 });
 
 // Virtual for total stock
 productSchema.virtual('totalStock').get(function() {

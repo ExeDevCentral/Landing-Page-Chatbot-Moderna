@@ -1,6 +1,7 @@
 // src/components/AdminPanel.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { UserRole, Permission } from '../../types/user';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { ProductCategory } from '../../types/inventory';
 import { SaleStatus, PaymentMethod } from '../../types/sales';
 import { DashboardStats } from '../../types/dashboard';
@@ -13,6 +14,8 @@ import SalesManagement from './admin/SalesManagement';
 import TicketManagement from './admin/TicketManagement';
 import Reports from './admin/Reports';
 import Settings from './admin/Settings';
+import ClientManagement from './admin/ClientManagement';
+import ProductManagement from './admin/ProductManagement';
 
 interface AdminPanelProps {
   currentUser: {
@@ -22,10 +25,9 @@ interface AdminPanelProps {
   };
 }
 
-type TabType = 'dashboard' | 'users' | 'inventory' | 'sales' | 'tickets' | 'reports' | 'settings';
+type TabType = 'dashboard' | 'users' | 'inventory' | 'sales' | 'tickets' | 'reports' | 'settings' | 'clients' | 'products';
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ currentUser }) => {
-  const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,6 +36,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ currentUser }) => {
     const allTabs = [
       { id: 'dashboard' as TabType, label: 'Dashboard', icon: '📊' },
       { id: 'users' as TabType, label: 'Usuarios', icon: '👥', permission: Permission.READ_USER },
+      { id: 'clients' as TabType, label: 'Clientes', icon: '🧑‍💼', permission: Permission.READ_USER },
+      { id: 'products' as TabType, label: 'Productos', icon: '📦', permission: Permission.READ_PRODUCT },
       { id: 'inventory' as TabType, label: 'Inventario', icon: '📦', permission: Permission.READ_PRODUCT },
       { id: 'sales' as TabType, label: 'Ventas', icon: '💰', permission: Permission.READ_SALE },
       { id: 'tickets' as TabType, label: 'Tickets', icon: '🎫', permission: Permission.READ_TICKET },
@@ -79,26 +83,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ currentUser }) => {
     loadDashboardStats();
   }, []);
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'dashboard':
-        return <Dashboard stats={dashboardStats} isLoading={isLoading} />;
-      case 'users':
-        return <UserManagement currentUser={currentUser} />;
-      case 'inventory':
-        return <InventoryManagement currentUser={currentUser} />;
-      case 'sales':
-        return <SalesManagement currentUser={currentUser} />;
-      case 'tickets':
-        return <TicketManagement currentUser={currentUser} />;
-      case 'reports':
-        return <Reports currentUser={currentUser} />;
-      case 'settings':
-        return <Settings currentUser={currentUser} />;
-      default:
-        return <div>Pestaña no encontrada</div>;
-    }
-  };
 
   return (
     <div className="admin-panel">
@@ -117,14 +101,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ currentUser }) => {
       <nav className="admin-nav">
         <div className="nav-tabs">
           {availableTabs.map(tab => (
-            <button
+            <Link
               key={tab.id}
-              className={`nav-tab ${activeTab === tab.id ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
+              to={`/${tab.id}`}
+              className={`nav-tab`}
             >
               <span className="tab-icon">{tab.icon}</span>
               <span className="tab-label">{tab.label}</span>
-            </button>
+            </Link>
           ))}
         </div>
       </nav>
@@ -132,7 +116,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ currentUser }) => {
       {/* Main Content */}
       <main className="admin-main">
         <div className="content-wrapper">
-          {renderTabContent()}
+          <Routes>
+            <Route path="/dashboard" element={<Dashboard stats={dashboardStats} isLoading={isLoading} />} />
+            <Route path="/users" element={<UserManagement currentUser={currentUser} />} />
+            <Route path="/clients" element={<ClientManagement />} />
+            <Route path="/products" element={<ProductManagement />} />
+            <Route path="/inventory" element={<InventoryManagement currentUser={currentUser} />} />
+            <Route path="/sales" element={<SalesManagement currentUser={currentUser} />} />
+            <Route path="/tickets" element={<TicketManagement currentUser={currentUser} />} />
+            <Route path="/reports" element={<Reports currentUser={currentUser} />} />
+            <Route path="/settings" element={<Settings currentUser={currentUser} />} />
+          </Routes>
         </div>
       </main>
 
