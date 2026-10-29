@@ -54,7 +54,7 @@
     "openai": "^4.20.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.9.4",
+    "react-router-dom": "^7.18.4",
     "socket.io": "^4.7.4",
     "winston": "^3.18.3"
   },
