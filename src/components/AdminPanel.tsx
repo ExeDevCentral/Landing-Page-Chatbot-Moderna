@@ -1,9 +1,7 @@
 // src/components/AdminPanel.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { UserRole, Permission } from '../../types/user';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import { ProductCategory } from '../../types/inventory';
-import { SaleStatus, PaymentMethod } from '../../types/sales';
+import { Route, Routes, Link, Navigate } from 'react-router-dom';
 import { DashboardStats } from '../../types/dashboard';
 
 // Import components (we'll create these)
@@ -117,6 +115,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ currentUser }) => {
       <main className="admin-main">
         <div className="content-wrapper">
           <Routes>
+            <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard stats={dashboardStats} isLoading={isLoading} />} />
             <Route path="/users" element={<UserManagement currentUser={currentUser} />} />
             <Route path="/clients" element={<ClientManagement />} />

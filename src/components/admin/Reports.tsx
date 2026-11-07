@@ -9,7 +9,7 @@ interface ReportsProps {
   };
 }
 
-const Reports: React.FC<ReportsProps> = ({ currentUser }) => {
+const Reports: React.FC<ReportsProps> = () => {
   return (
     <div className="reports">
       <div className="page-header">

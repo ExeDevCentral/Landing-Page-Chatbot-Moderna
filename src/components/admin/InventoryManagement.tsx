@@ -9,7 +9,7 @@ interface InventoryManagementProps {
   };
 }
 
-const InventoryManagement: React.FC<InventoryManagementProps> = ({ currentUser }) => {
+const InventoryManagement: React.FC<InventoryManagementProps> = () => {
   return (
     <div className="inventory-management">
       <div className="page-header">

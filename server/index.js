@@ -156,7 +156,7 @@ app.get('/api/health', (req, res) => {
   
   try {
     res.status(200).json(healthCheck);
-  } catch (error) {
+  } catch {
     healthCheck.message = 'Error';
     res.status(503).json(healthCheck);
   }

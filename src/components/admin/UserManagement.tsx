@@ -12,9 +12,8 @@ interface UserManagementProps {
 const UserManagement: React.FC<UserManagementProps> = ({ currentUser }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [, setShowCreateModal] = useState(false);
+  const [, setEditingUser] = useState<User | null>(null);  const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<UserRole | 'all'>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
 
@@ -47,42 +46,6 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUser }) => {
 
     return matchesSearch && matchesRole && matchesStatus;
   });
-
-  const handleCreateUser = useCallback(async (userData: Partial<User>) => {
-    try {
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-      });
-      const data = await response.json();
-      setUsers(prev => [...prev, data.data.user]);
-      setShowCreateModal(false);
-    } catch (error) {
-      console.error('Error creating user:', error);
-    }
-  }, []);
-
-  const handleUpdateUser = useCallback(async (userId: string, userData: Partial<User>) => {
-    try {
-      const response = await fetch(`/api/users/${userId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-      });
-      const data = await response.json();
-      setUsers(prev => prev.map(user =>
-        user._id === userId ? data.data.user : user
-      ));
-      setEditingUser(null);
-    } catch (error) {
-      console.error('Error updating user:', error);
-    }
-  }, []);
 
   const handleToggleUserStatus = useCallback(async (userId: string, isActive: boolean) => {
     try {

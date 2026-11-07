@@ -10,7 +10,7 @@ interface TicketManagementProps {
   };
 }
 
-const TicketManagement: React.FC<TicketManagementProps> = ({ currentUser }) => {
+const TicketManagement: React.FC<TicketManagementProps> = () => {
   return (
     <div className="ticket-management">
       <div className="page-header">

@@ -4,8 +4,6 @@ const jwt = require('jsonwebtoken');
 const { AppError } = require('../utils/errorHandler');
 const User = require('../models/User');
 
-const Role = require('../models/Role');
-
 // Protect routes
 exports.protect = async (req, res, next) => {
   try {
@@ -37,7 +35,7 @@ exports.protect = async (req, res, next) => {
 
     req.user = user;
     next();
-  } catch (error) {
+  } catch {
     return next(new AppError('Token is not valid', 401));
   }
 };

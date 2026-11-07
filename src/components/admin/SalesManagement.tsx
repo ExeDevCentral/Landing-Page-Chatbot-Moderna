@@ -9,7 +9,7 @@ interface SalesManagementProps {
   };
 }
 
-const SalesManagement: React.FC<SalesManagementProps> = ({ currentUser }) => {
+const SalesManagement: React.FC<SalesManagementProps> = () => {
   return (
     <div className="sales-management">
       <div className="page-header">

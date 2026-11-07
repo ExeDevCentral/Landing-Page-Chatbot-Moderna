@@ -145,7 +145,7 @@ const requestLogger = (req, res, next) => {
 };
 
 // Error boundary middleware
-const errorBoundary = (err, req, res, next) => {
+const errorBoundary = (err, req, res, _next) => {
     try {
         console.error('Unhandled error:', err);
 

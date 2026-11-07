@@ -9,7 +9,7 @@ interface SettingsProps {
   };
 }
 
-const Settings: React.FC<SettingsProps> = ({ currentUser }) => {
+const Settings: React.FC<SettingsProps> = () => {
   return (
     <div className="settings">
       <div className="page-header">

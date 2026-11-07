@@ -2,7 +2,7 @@
 
 const Ticket = require('../models/Ticket');
 const Counter = require('../models/Counter');
-const { AppError, ErrorTypes, ErrorMessages, asyncHandler, logError, retryOperation } = require('../utils/errorHandler');
+const { AppError, ErrorTypes, asyncHandler, logError, retryOperation } = require('../utils/errorHandler');
 
 // Enhanced validation helper
 const validateTicketData = (data) => {
