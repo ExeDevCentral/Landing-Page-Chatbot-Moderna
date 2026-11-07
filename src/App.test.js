@@ -2,8 +2,10 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders hello world', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/hello, world/i);
-  expect(linkElement).toBeInTheDocument();
+describe('App routing', () => {
+  it('renders the login route', () => {
+    window.history.pushState({}, '', '/login');
+    render(<App />);
+    expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument();
+  });
 });
