@@ -108,5 +108,10 @@
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExeDevCentral/Landing-Page-Chatbot-Moderna.git"
+  },
+  "homepage": "https://github.com/ExeDevCentral/Landing-Page-Chatbot-Moderna"
 }
